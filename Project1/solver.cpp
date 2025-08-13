@@ -28,6 +28,12 @@ int apply_unit_clause(int** clause_set, int clause_number, int* assignment, int 
                     count++;
                     last_unit_variable = clause_set[i][j];//记录该元素
                 }
+                else if (assignment[lit] == clause_set[i][j]) {
+                        clause_set[i][0] = 0;
+                        count = 0;
+                        break;
+                    }
+                
                 if (count > 1)break;
             }
             ////////
@@ -45,20 +51,20 @@ int apply_unit_clause(int** clause_set, int clause_number, int* assignment, int 
                             int k;
                             for ( k = j; clause_set[a][k] != 0; k++)clause_set[a][k] = clause_set[a][k + 1];//该元素在此处不满足，直接删除
                             clause_set[a][k] = 0;//保证末尾为0
-                            if (clause_set[a][0] == 0)return 0;//某个子句被删除完全，表示不可能满足，retrun 0 表示不满足
+                            if (clause_set[a][0] == 0)return 0;//仅在删除操作后运行，某个子句被删除完全，表示不可能满足，retrun 0 表示不满足
                             --j;
                         }
                     }
                 }
                 /////
-                printf("单子句元素为%d\n", last_unit_variable);
+               /* printf("单子句元素为%d\n", last_unit_variable);
                 for (int i = 0; i < clause_number; i++) {
                     printf("第%d子句为: ", i);
                     for (int j = 0; clause_set[i][j] != 0; j++) {
                         printf("%d ", clause_set[i][j]);
                     }
                     printf("\n");
-                }
+                }*/
                 //////
             }
            
@@ -123,7 +129,7 @@ int dpll(int** clause_set, int clause_number, int* assignment, int variable_numb
     }
     // 尝试赋值为真
     new_assignment[var] = var;
-    printf("尝试赋值%d\n", var);
+    //printf("尝试赋值%d\n", var);
     if (dpll(new_clause_set, clause_number, new_assignment, variable_number)) {
         memcpy(assignment, new_assignment, sizeof(int) * (variable_number + 1));
         free_clause_set(new_clause_set, clause_number);
@@ -132,7 +138,7 @@ int dpll(int** clause_set, int clause_number, int* assignment, int variable_numb
     }
     // 尝试赋值为假
     new_assignment[var] = -var;
-    printf("尝试赋值%d\n", -var);
+    //printf("尝试赋值%d\n", -var);
     if (dpll(new_clause_set, clause_number, new_assignment, variable_number)) {
         memcpy(assignment, new_assignment, sizeof(int) * (variable_number + 1));
         free_clause_set(new_clause_set, clause_number);
@@ -142,7 +148,7 @@ int dpll(int** clause_set, int clause_number, int* assignment, int variable_numb
     // 两种赋值都失败
     free_clause_set(new_clause_set, clause_number);
     free(new_assignment);
-    printf("回退%d\n",abs(var));
+    //printf("回退%d\n",abs(var));
     return 0;
 }
 

@@ -129,7 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cnfphase.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="display.cpp" />
     <ClCompile Include="solver.cpp" />
   </ItemGroup>
   <ItemGroup>
